@@ -27,6 +27,12 @@ module frontAngleBracket(angle) {
 
             translate([0,0,1.5]) mirror([0,0,1]) rotate([-angle,0,0]) cube([1.5,2,3]);
 
+            translate([0,0,1.5]) rotate([angle,0,0]) translate([1.5,1,-0.75]) difference() {
+                union() {
+                    translate([.25,0,0]) cylinder(0.75,0.25,0.25,$fn=res);
+                    translate([0,-0.25,0]) cube([0.25,0.5,0.75]);
+                } translate([.25,0,-0.1]) cylinder(1,0.0984252,0.0984252,$fn=res);
+            }
         }
 
         // cleanup
