@@ -26,6 +26,11 @@ translate([0,0,height]) {
 } //cube([1,0.5,height]);
 
 
+// MCMASTER 94180A333
+module heatSetInsert() {
+    translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969,$fn=30);
+}
+
 module cornerBracket() {
     stepperHeight = 38;
     stepperHeightImp = 0.0393701*stepperHeight;
@@ -48,6 +53,17 @@ module cornerBracket() {
         // bracket cutout
         translate([-0.5,-0.5,-0.5]) cube([1.5,1,5]);
         
+        // limit switch cutout
+        switchWidth = 0.5019685;
+        switchDepth = 0.5;
+        switchHeight = 0.228346;
+        switchHoleInset = 0.200787;
+        switchHoleDistance = 0.255906;
+    
+        translate([0.5-switchWidth/2,3-switchDepth,-0.25]) cube([switchWidth,switchDepth+0.25,switchHeight+0.25]);
+        translate([0.5+switchHoleDistance/2,3-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+        translate([0.5-switchHoleDistance/2,3-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+        
         // screw and nut cutouts
         nutWidth = 3/8 + 0.01;
         nutHeight = 1/8 + 0.01;
@@ -66,6 +82,8 @@ module cornerBracket() {
 
         translate([0.5,2,1]) rotate([-90,0,0]) shaft(2);
     }
+    
+        
 }
 
 module stepperBracket() {
@@ -109,12 +127,6 @@ module stepperBracket() {
 
 
 module pulleyBracket() {
-    
-    // MCMASTER 94180A333
-    module heatSetInsert() {
-        translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969,$fn=30);
-    }
-    
     stepperHeight = 38;
     stepperHeightImp = 0.0393701*stepperHeight;
 
