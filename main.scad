@@ -26,8 +26,6 @@ translate([0,0,height]) {
 } //cube([1,0.5,height]);
 
 
-shaft(10);
-
 module cornerBracket() {
     stepperHeight = 38;
     stepperHeightImp = 0.0393701*stepperHeight;
@@ -90,8 +88,28 @@ module stepperBracket() {
     translate([1,1,0]) stepper(stepperHeight);
 }
 
+
+
 module pulleyBracket() {
-    cornerBracket();
+    
+    // MCMASTER 94180A333
+    module heatSetInsert() {
+        translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969,$fn=30);
+    }
+    
+    stepperHeight = 38;
+    stepperHeightImp = 0.0393701*stepperHeight;
+
+    mainHeight = stepperHeightImp+0.25;
+
+    difference() {
+        cornerBracket();
+        
+        translate([1 + 1.665354/2,1 + 1.665354/2,mainHeight]) {
+            heatSetInsert();
+            translate([0.5,0.5]) heatSetInsert(); 
+        }
+    }
 }
 
 width = 20;
