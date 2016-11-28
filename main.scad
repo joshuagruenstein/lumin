@@ -97,6 +97,10 @@ module stepperBracket() {
         translate([1 + 1.665354/2,1 + 1.665354/2,0]) scale(0.0393701) for (i = [0:3]) {
             rotate([0, 0, 90 * i]) translate([15.5, 15.5]) cylinder(h = 100, r = 1.5, $fn = 24);
         }
+        
+        // stepper wire cutout
+        translate([2.5,1+1.665354/2,0]) rotate([0,90,0]) cylinder(r=0.25,h=1,$fn=30);
+
     }
 
     translate([1,1,0]) stepper(stepperHeight);
