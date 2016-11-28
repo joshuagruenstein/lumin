@@ -19,13 +19,6 @@ module shaft(length,centered) {
     color([0.9,0.9,0.9]) cylinder(h=length,r=shaftRad,center=centered,$fn=30);
 }
 
-height = 2.5;
-translate([0,0,height]) {
-    //cube([1,10,0.5]);
-    //translate([0.5,0]) cube([10,1,0.5]);
-} //cube([1,0.5,height]);
-
-
 // MCMASTER 94180A333
 module heatSetInsert() {
     translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969,$fn=30);
@@ -65,8 +58,8 @@ module cornerBracket() {
         translate([0.5-switchHoleDistance/2,3-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
         
         // screw and nut cutouts
-        nutWidth = 3/8 + 0.01;
-        nutHeight = 1/8 + 0.01;
+        nutWidth = 3/8 + 0.02;
+        nutHeight = 1/8 + 0.02;
         screwRad = 0.10;
         translate([1,0.5-nutWidth/2,edgeHeight-nutHeight-0.25]) cube([4,nutWidth,nutHeight]);
         translate([1.5,0.5,edgeHeight-1.5]) cylinder(r=screwRad,h=10,$fn=30);
@@ -86,7 +79,7 @@ module cornerBracket() {
         
 }
 
-module stepperBracket() {
+module stepperBracket(showStepper) {
     stepperHeight = 38;
     stepperHeightImp = 0.0393701*stepperHeight;
 
@@ -121,7 +114,7 @@ module stepperBracket() {
 
     }
 
-    translate([1,1,0]) stepper(stepperHeight);
+    if (showStepper) translate([1,1,0]) stepper(stepperHeight);
 }
 
 
@@ -142,9 +135,40 @@ module pulleyBracket() {
     }
 }
 
-width = 20;
+// length = 20 (final)
+width = 16;
+height = 4;
 
-stepperBracket();
-translate([width,0,0]) mirror([1,0,0]) stepperBracket();
-translate([0,20,0]) mirror([0,1,0]) pulleyBracket();
-translate([20,20,0]) rotate([0,0,180]) pulleyBracket();
+module scaffolding() {
+    color([0.3,0.3,0.3]) {
+        translate([0,0,height-0.5]) {
+            cube([1,20,0.5]);
+            translate([width-1,0,0]) cube([1,20,0.5]);
+            cube([width,1,0.5]);
+            translate([0,19,0]) cube([width,1,0.5]);
+        }
+        
+        cube([1,0.5,height-0.5]);
+        translate([width-1,0,0]) cube([1,0.5,height-0.5]);
+        translate([0,19.5,0]) cube([1,0.5,height-0.5]);
+        translate([width-1,19.5,0]) cube([1,0.5,height-0.5]);
+    }
+}
+
+module brackets(showStepOrPull) {
+    translate([0,0,height-3]) {
+        stepperBracket(showStepOrPull);
+        translate([width,0,0]) mirror([1,0,0]) stepperBracket(showStepOrPull);
+        translate([0,20,0]) mirror([0,1,0]) pulleyBracket(showStepOrPull);
+        translate([width,20,0]) rotate([0,0,180]) pulleyBracket(showStepOrPull);
+    }
+}
+
+module gantry() {
+    translate([0.5,2,height-2]) rotate([-90,0,0]) shaft(16);
+    translate([width-0.5,2,height-2]) rotate([-90,0,0]) shaft(16);
+}
+
+brackets(true);
+scaffolding();
+gantry();
