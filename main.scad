@@ -16,13 +16,27 @@ module stepper(motor_height, centered) {
 
 module shaft(length,centered) {
     shaftRad = 0.314961/2;
-    color([0.9,0.9,0.9]) cylinder(h=length,r=shaftRad,center=centered,$fn=30);
+    color([0.8,0.8,0.8]) cylinder(h=length,r=shaftRad,center=centered,$fn=30);
 }
 
 // MCMASTER 94180A333
 module heatSetInsert() {
     translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969,$fn=30);
 }
+
+module limitSwitch() {
+    switchWidth = 0.5019685;
+    switchDepth = 0.5;
+    switchHeight = 0.228346;
+    switchHoleInset = 0.200787;
+    switchHoleDistance = 0.255906;
+    
+    translate([-switchWidth/2,-switchDepth,-0.25]) cube([switchWidth,switchDepth+0.25,switchHeight+0.25]);
+    translate([+switchHoleDistance/2,-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+    translate([-switchHoleDistance/2,-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+}
+
+rodHeight = 1.3;
 
 module cornerBracket() {
     stepperHeight = 38;
@@ -46,16 +60,7 @@ module cornerBracket() {
         // bracket cutout
         translate([-0.5,-0.5,-0.5]) cube([1.5,1,5]);
         
-        // limit switch cutout
-        switchWidth = 0.5019685;
-        switchDepth = 0.5;
-        switchHeight = 0.228346;
-        switchHoleInset = 0.200787;
-        switchHoleDistance = 0.255906;
-    
-        translate([0.5-switchWidth/2,3-switchDepth,-0.25]) cube([switchWidth,switchDepth+0.25,switchHeight+0.25]);
-        translate([0.5+switchHoleDistance/2,3-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
-        translate([0.5-switchHoleDistance/2,3-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+        translate([0.5,3,0]) limitSwitch();
         
         // screw and nut cutouts
         nutWidth = 3/8 + 0.02;
@@ -73,10 +78,8 @@ module cornerBracket() {
         translate([0.5,0.25,0.5]) rotate([-90,0,0]) cylinder(r=0.1,h=1.5,$fn=30);
         translate([0.5,0.25,1.5]) rotate([-90,0,0]) cylinder(r=0.1,h=1.5,$fn=30);
 
-        translate([0.5,2,1]) rotate([-90,0,0]) shaft(2);
-    }
-    
-        
+        translate([0.5,2,rodHeight]) rotate([-90,0,0]) shaft(2);
+    }        
 }
 
 module stepperBracket(showStepper) {
@@ -164,10 +167,63 @@ module brackets(showStepOrPull) {
     }
 }
 
-module gantry() {
-    translate([0.5,2,height-2]) rotate([-90,0,0]) shaft(16);
-    translate([width-0.5,2,height-2]) rotate([-90,0,0]) shaft(16);
+module initStage(showShafts) {
+    bearingRad = 0.295276;
+    bearingLength = 2*0.94488189;
+    
+    curveRad = 0.4375;
+    
+    rodDistance = 1;
+    idlerDistance = 1;
+    
+    color([1,1,1]) difference() {
+        union() {
+            hull() {
+                cylinder(h=bearingLength,r=curveRad,$fn=50);
+                translate([0,rodHeight-curveRad]) cylinder(h=bearingLength,r=curveRad,$fn=50);
+                
+
+            } translate([0,-curveRad]) cube([1.5,1,bearingLength]);
+        }
+        
+        translate([curveRad+0.25,1-curveRad,-0.25]) cylinder(h=bearingLength+0.5,r=0.25,$fn=50);
+        translate([curveRad+0.25,1-curveRad-0.25,-0.25]) cube([1,1,bearingLength+0.5]);
+
+        // bearings
+        translate([0,0,-0.1]) cylinder(h=bearingLength+0.25,r=bearingRad,$fn=30);
+        
+        // rods
+        translate([0.5,0,bearingLength/2-rodDistance/2]) rotate([0,90,0]) shaft(2);
+    translate([0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(2);
+        
+        // limit switch
+        translate([1.5,1-curveRad-0.25,bearingLength/2]) rotate([90,90,0]) limitSwitch();
+
+        // idler inserts
+        translate([1,-curveRad,bearingLength/2-idlerDistance/2]) rotate([90,0,0]) heatSetInsert();
+        translate([1,-curveRad,bearingLength/2+idlerDistance/2]) rotate([90,0,0]) heatSetInsert();
+    }
+    
+    
+    
+    if (showShafts) {
+        shaftLength = width-2;
+        translate([0.5,0,bearingLength/2-rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
+        translate([0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
+    }
 }
+
+module gantry() {
+    gantryYLocation = 3;
+    gantryXLocation = 5;
+    
+    translate([0.5,2,height-3+rodHeight]) rotate([-90,0,0]) shaft(16);
+    translate([width-0.5,2,height-3+rodHeight]) rotate([-90,0,0]) shaft(16);
+   
+    translate([0.5,3+gantryYLocation,height-3+rodHeight]) rotate([-90,0,0]) initStage(true);
+    
+    translate([width-0.5,3+gantryYLocation,height-3+rodHeight]) mirror([1,0,0]) rotate([-90,0,0]) initStage();
+ }
 
 brackets(true);
 scaffolding();
