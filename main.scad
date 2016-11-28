@@ -75,7 +75,21 @@ module stepperBracket() {
     mainHeight = stepperHeightImp+0.25;
     edgeHeight = 2.5;
     color([1,1,1]) difference() {
-        cornerBracket();
+        union() {
+            cornerBracket();
+            translate([3,2.5,0]) rotate([90,0,0]) linear_extrude(0.25) difference() {
+                hull() {
+                    square([0.25,0.25]);
+                    translate([0,mainHeight-0.25]) square([0.25,0.25]);
+                    translate([0.5,0.25]) circle(r=0.25,$fn=30);
+                    translate([0.5,mainHeight-0.25]) circle(r=0.25,$fn=30);
+                    
+                }
+
+                translate([0.375,mainHeight/2 + 0.5]) circle(r=0.075,$fn=30);
+                translate([0.375,mainHeight/2 - 0.5]) circle(r=0.075,$fn=30);
+            }
+        }
         
         // stepper cutout
         translate([1,1,-0.25]) cube([1.665354,1.665354, stepperHeightImp+0.25], center = false);
