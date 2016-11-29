@@ -4,11 +4,15 @@ $fn = 30;
 
 gantryXLocation = 6;   //6+6*cos(800*$t)
 gantryYLocation = 6;   //6+6*sin(800*$t)
-gantryZLocation = 1.4;
+gantryZLocation = 0;
 
-rodHeight = 1.3;
+rodHeight = 1;
 rodDistance = 1;
 zRodDistance = 1.15;
+
+// length = 20 (final)
+width = 20;
+height = 6;
 
 // for 10-32 hardware
 nutWidth = 3/8 + 0.02;
@@ -116,7 +120,8 @@ module pulleyBracket() {
 module initStage(showShafts) {
     curveRad = 0.4375;
 
-    idlerDistance = 1;
+    idlerSpacing = 1;
+    idlerDistance = 0.5 + 1.665354/2;
 
     rodStored = 2;
 
@@ -142,20 +147,20 @@ module initStage(showShafts) {
         translate([0.5+rodStored,1-curveRad-0.25,bearingLength/2]) rotate([90,90,0]) limitSwitch();
 
         // idler inserts
-        translate([1,-curveRad,bearingLength/2-idlerDistance/2]) rotate([90,0,0]) heatSetInsert();
-        translate([1,-curveRad,bearingLength/2+idlerDistance/2]) rotate([90,0,0]) heatSetInsert();
+        translate([idlerDistance,-curveRad,bearingLength/2-idlerSpacing/2]) rotate([90,0,0]) heatSetInsert();
+        translate([idlerDistance,-curveRad,bearingLength/2+idlerSpacing/2]) rotate([90,0,0]) heatSetInsert();
     }
 
     if (showShafts) {
         shaftLength = width-2;
         echo(shaftLength);
 
-        translate([0.5,0,bearingLength/2-rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
-        translate([0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
+        translate([-0.5,0,bearingLength/2-rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
+        translate([-0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
     }
 }
 
-module xyCarriage() {
+module xyCarriage(showStepper) {
     curveRad = 0.4375;
 
     carriageHeight = 0.75;
@@ -217,7 +222,7 @@ module xyCarriage() {
 
     }
 
-    color([0.4,0.4,0.4]) translate([bearingLength/2,bearingLength/2,stepperMountHeight+1.10236/2+0.75]) rotate(45) cube([1.385827,1.385827,1.10236],center=true);
+    if (showStepper) color([0.4,0.4,0.4]) translate([bearingLength/2,bearingLength/2,stepperMountHeight+1.10236/2+0.75]) rotate(45) cube([1.385827,1.385827,1.10236],center=true);
 }
 
 module zCarriage() {
@@ -274,10 +279,6 @@ module zCap() {
     }
 }
 
-// length = 20 (final)
-width = 20;
-height = 6;
-
 module scaffolding() {
     color([0.3,0.3,0.3]) {
         translate([0,0,height-0.5]) {
@@ -311,7 +312,7 @@ module gantry() {
 
     translate([width-0.5,3+gantryYLocation,height-3+rodHeight]) mirror([1,0,0]) rotate([-90,0,0]) initStage();
 
-    translate([3+gantryXLocation,3+gantryYLocation,height-3+rodHeight-0.315]) xyCarriage();
+    translate([3+gantryXLocation,3+gantryYLocation,height-3+rodHeight-0.315]) xyCarriage(true);
 
     translate([2+0.94488189+gantryXLocation+1,0.94488189+3+gantryYLocation,height-3+rodHeight-0.315-gantryZLocation]) rotate([0,180,0]) zCarriage();
 
