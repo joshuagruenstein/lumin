@@ -27,7 +27,7 @@ screwRad = 0.10;
 bearingRad = 0.295276;
 bearingLength = 2*0.94488189;
 
-// for pololu nema 17 somethingoranother
+// for pololu nema 17 2267
 stepperHeight = 38;
 stepperHeightImp = 0.0393701*stepperHeight;
 mainHeight = stepperHeightImp+0.25;
@@ -152,13 +152,13 @@ module initStage(showShafts) {
 
     if (showShafts) {
         shaftLength = width-2;
-        echo(shaftLength);
 
         translate([-0.5,0,bearingLength/2-rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
         translate([-0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(shaftLength);
     }
 }
 
+// using nema 14 pololu 1208
 module xyCarriage(showStepper) {
     curveRad = 0.4375;
 
@@ -279,6 +279,7 @@ module zCap() {
     }
 }
 
+// uses 1"x 0.5" box tubing, in particular 6061 aluminum with 1/16" wall
 module scaffolding() {
     color([0.3,0.3,0.3]) {
         translate([0,0,height-0.5]) {
