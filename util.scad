@@ -22,22 +22,22 @@ module stepper(motor_height, centered) {
                     cube([42.3, 42.3, motor_height], center = true);
                     rotate([0, 0, 45]) translate([0, 0, -1]) cube([74.3 * sin(45), 73.3 * sin(45), motor_height + 2], center = true);
                 }
-            } color([0.4, 0.4, 0.4]) translate([0, 0, motor_height]) cylinder(h = 2, r = 11, $fn = 24);
-            color([0.8, 0.8, 0.8]) translate([0, 0, motor_height + 2]) cylinder(h = 20, r = 2.5, $fn = 24);
+            } color([0.4, 0.4, 0.4]) translate([0, 0, motor_height]) cylinder(h = 2, r = 11);
+            color([0.8, 0.8, 0.8]) translate([0, 0, motor_height + 2]) cylinder(h = 20, r = 2.5);
         } for (i = [0: 3]) {
-            rotate([0, 0, 90 * i]) translate([15.5, 15.5, motor_height - 4.5]) cylinder(h = 5, r = 1.5, $fn = 24);
+            rotate([0, 0, 90 * i]) translate([15.5, 15.5, motor_height - 4.5]) cylinder(h = 5, r = 1.5);
         }
     }
 }
 
 module shaft(length,centered) {
     shaftRad = 0.314961/2;
-    color([0.8,0.8,0.8]) cylinder(h=length,r=shaftRad,center=centered,$fn=30);
+    color([0.8,0.8,0.8]) cylinder(h=length,r=shaftRad,center=centered);
 }
 
 // MCMASTER 94180A333
 module heatSetInsert() {
-    translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969,$fn=30);
+    translate([0,0,-0.251969]) cylinder(r1=0.09251969,r2=0.10295276,h=0.251969);
 }
 
 module limitSwitch() {

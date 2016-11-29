@@ -1,6 +1,10 @@
+$fn = 30;
+
 use <util.scad>
 
-$fn = 30;
+///////////////////
+//   CONSTANTS   //
+///////////////////
 
 gantryXLocation = 6;   //6+6*cos(800*$t)
 gantryYLocation = 6;   //6+6*sin(800*$t)
@@ -23,12 +27,13 @@ screwRad = 0.10;
 bearingRad = 0.295276;
 bearingLength = 2*0.94488189;
 
-module cornerBracket() {
-    stepperHeight = 38;
-    stepperHeightImp = 0.0393701*stepperHeight;
+// for pololu nema 17 somethingoranother
+stepperHeight = 38;
+stepperHeightImp = 0.0393701*stepperHeight;
+mainHeight = stepperHeightImp+0.25;
+edgeHeight = 2.5;
 
-    mainHeight = stepperHeightImp+0.25;
-    edgeHeight = 2.5;
+module cornerBracket() {
     color([1,1,1]) difference() {
         union() {
             hull() {
@@ -65,11 +70,6 @@ module cornerBracket() {
 }
 
 module stepperBracket(showStepper) {
-    stepperHeight = 38;
-    stepperHeightImp = 0.0393701*stepperHeight;
-
-    mainHeight = stepperHeightImp+0.25;
-    edgeHeight = 2.5;
     color([1,1,1]) difference() {
         union() {
             cornerBracket();
@@ -102,14 +102,13 @@ module stepperBracket(showStepper) {
 }
 
 module pulleyBracket() {
-    stepperHeight = 38;
-    stepperHeightImp = 0.0393701*stepperHeight;
-
-    mainHeight = stepperHeightImp+0.25;
-
-    difference() {
+    color([1,1,1]) difference() {
         cornerBracket();
 
+        // material savings cutout
+        translate([1,-0.5,-0.25]) cube([3,4,stepperHeightImp]);
+
+        // idler heat set inserts
         translate([1 + 1.665354/2,1 + 1.665354/2,mainHeight]) {
             heatSetInsert();
             translate([0.5,0.5]) heatSetInsert();
@@ -208,15 +207,16 @@ module xyCarriage(showStepper) {
         // smaller hole
         translate([bearingLength/2,bearingLength/2,-0.1]) cylinder(r=0.1875,h=10);
 
+        // m3 holes and head cutouts
         translate([bearingLength/2+stepperScrewDistance,bearingLength/2,-0.1]) {
             cylinder(r=stepperScrewRad,h=50);
             translate([0,0,-0.0875]) cylinder(r=0.095,h=0.75);
-        }
-        translate([bearingLength/2-stepperScrewDistance,bearingLength/2,-0.1]) {
+        } translate([bearingLength/2-stepperScrewDistance,bearingLength/2,-0.1]) {
             cylinder(r=stepperScrewRad,h=50);
             translate([0,0,-0.0875]) cylinder(r=0.095,h=0.75);
         }
 
+        // 8mm shaft mounts
         translate([bearingLength/2-zRodDistance/2,bearingLength/2,-0.1875]) shaft(0.75);
         translate([bearingLength/2+zRodDistance/2,bearingLength/2,-0.1875]) shaft(0.75);
 
