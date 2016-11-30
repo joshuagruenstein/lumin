@@ -69,6 +69,43 @@ module cornerBracket() {
     }
 }
 
+module bracketJig(side) {
+    module mark() {
+        rad = 0.1;
+        lineWidth = 0.01;
+
+        difference() {
+            circle(r=rad);
+            for (i=[0,3]) {
+                rotate(45 + 90*i) square([rad*2,lineWidth],center=true);
+            }
+        }
+
+    }
+
+    if (side) difference() {
+        union() {
+            square([1,3]);
+            translate([0,2.5]) square([3,0.5]);
+        }
+
+        translate([0.5,0.5]) mark();
+        translate([0.5,1.5]) mark();
+    } else difference() {
+        union() {
+            square([1,3.5]);
+            square([3.5,1]);
+        }
+
+        translate([1.5,0.5]) mark();
+        translate([2.5,0.5]) mark();
+
+        translate([0.5,1.5]) mark();
+        translate([0.5,2.5]) mark();
+    }
+
+}
+
 module stepperBracket(showStepper) {
     color([1,1,1]) difference() {
         union() {
@@ -140,7 +177,7 @@ module initStage(showShafts) {
 
         // rods
         translate([0.5,0,bearingLength/2-rodDistance/2]) rotate([0,90,0]) shaft(2);
-    translate([0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(2);
+        translate([0.5,0,bearingLength/2+rodDistance/2]) rotate([0,90,0]) shaft(2);
 
         // limit switch
         translate([0.5+rodStored,1-curveRad-0.25,bearingLength/2]) rotate([90,90,0]) limitSwitch();
