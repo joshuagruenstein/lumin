@@ -61,7 +61,7 @@ module cornerBracket() {
         translate([0.5,1.5,edgeHeight-1.5]) cylinder(r=screwRad,h=100);
         translate([0.5,2.5,edgeHeight-1.5]) cylinder(r=screwRad,h=100);
 
-        translate([0.5-nutWidth/2,0.75,-0.25]) cube([nutWidth,nutHeight,mainHeight+0.25]);
+        translate([0.5-nutWidth/2,0.75,-0.25]) cube([nutWidth,nutHeight,mainHeight+0.5]);
         translate([0.5,0.25,0.5]) rotate([-90,0,0]) cylinder(r=0.1,h=1.50);
         translate([0.5,0.25,1.5]) rotate([-90,0,0]) cylinder(r=0.1,h=1.50);
 
