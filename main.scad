@@ -203,6 +203,7 @@ module xyCarriage(showStepper) {
 
     stepperScrewDistance = 0.7238100909803151;
     stepperScrewRad = 0.0629921;
+    stepperScrewHeadRad = 0.11811;
 
 
     stepperMountHeight = 0;
@@ -247,10 +248,10 @@ module xyCarriage(showStepper) {
         // m3 holes and head cutouts
         translate([bearingLength/2+stepperScrewDistance,bearingLength/2,-0.1]) {
             cylinder(r=stepperScrewRad,h=50);
-            translate([0,0,-0.0875]) cylinder(r=0.095,h=0.75);
+            translate([0,0,-0.0875]) cylinder(r=stepperScrewHeadRad,h=0.875);
         } translate([bearingLength/2-stepperScrewDistance,bearingLength/2,-0.1]) {
             cylinder(r=stepperScrewRad,h=50);
-            translate([0,0,-0.0875]) cylinder(r=0.095,h=0.75);
+            translate([0,0,-0.0875]) cylinder(r=stepperScrewHeadRad,h=0.875);
         }
 
         // 8mm shaft mounts
