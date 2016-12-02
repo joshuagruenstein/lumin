@@ -361,6 +361,17 @@ module gantry() {
     translate([3+gantryXLocation+bearingLength/2,3+gantryYLocation+bearingLength/2]) zCap();
 }
 
+module indivPart() {
+    //stepperBracket();
+    //mirror([1,0,0]) stepperBracket();
+    //mirror([0,1,0]) pulleyBracket();
+    //rotate([0,0,180]) pulleyBracket();
+    //initStage(); //2x
+    //xyCarriage();
+    //zCarriage();
+    //zCap();
+}
+
 brackets(true);
 scaffolding();
 gantry();
