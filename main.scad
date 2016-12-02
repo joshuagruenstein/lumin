@@ -127,7 +127,7 @@ module stepperBracket(showStepper) {
         translate([1,1,-0.25]) cube([1.665354,1.665354, stepperHeightImp+0.25], center = false);
         translate([1 + 1.665354/2,1 + 1.665354/2,0]) cylinder(r=0.5,h=edgeHeight);
         translate([1 + 1.665354/2,1 + 1.665354/2,0]) scale(0.0393701) for (i = [0:3]) {
-            rotate([0, 0, 90 * i]) translate([15.5, 15.5]) cylinder(h = 100, r = 1.5);
+            rotate([0, 0, 90 * i]) translate([15.5, 15.5]) cylinder(h = 100, r = 1.55);
         }
 
         // stepper wire cutout
