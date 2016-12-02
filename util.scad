@@ -47,6 +47,6 @@ module limitSwitch() {
     switchHoleDistance = 0.255906;
 
     translate([-switchWidth/2,-switchDepth,-0.25]) cube([switchWidth,switchDepth+0.25,switchHeight+0.25]);
-    translate([+switchHoleDistance/2,-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
-    translate([-switchHoleDistance/2,-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+    //translate([+switchHoleDistance/2,-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
+    //translate([-switchHoleDistance/2,-switchHoleInset,switchHeight]) rotate([180,0,0]) heatSetInsert();
 }
