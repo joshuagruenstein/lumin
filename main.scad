@@ -8,7 +8,7 @@ use <util.scad>
 
 gantryXLocation = 6;   //6+6*cos(800*$t)
 gantryYLocation = 6;   //6+6*sin(800*$t)
-gantryZLocation = 0;
+gantryZLocation = .5;
 
 rodHeight = 1;
 rodDistance = 1;
@@ -265,7 +265,7 @@ module xyCarriage(showStepper) {
 
 module zCarriage() {
     leadNutHeight = 0.266;
-    leadNutWidth = 0.55;
+    leadNutWidth = 0.5;
 
     m3Dist = 0.21;
 
@@ -274,16 +274,18 @@ module zCarriage() {
     color([1,1,1]) difference() {
         translate([-bearingLength/2,-bearingLength/2]) cube([bearingLength,bearingLength,bearingLength]);
 
+        bushingRad = 0.197;
 
-        // bearing pockets
-        translate([zRodDistance/2,0,0]) cylinder(r=bearingRad,h=bearingLength);
-        translate([-zRodDistance/2,0,0]) cylinder(r=bearingRad,h=bearingLength);
+        // bushing pockets
+        translate([zRodDistance/2,0,0]) cylinder(r=bushingRad,h=bearingLength);
+        translate([-zRodDistance/2,0,0]) cylinder(r=bushingRad,h=bearingLength);
 
         // nut pocket
         translate([-leadNutWidth/2,-5,bearingLength/2-leadNutHeight/2]) cube([leadNutWidth,10,leadNutHeight]);
 
         //threaded rod hole
         cylinder(r=0.165,h=bearingLength);
+        translate([0,0,-0.25]) cylinder(r=0.25,h=0.75);
 
         // limit switch
         translate([0,-bearingLength/2,0]) rotate([-90,0,0]) limitSwitch();
